@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
 	int sam2_aligned_reads_matched = 0;
 
 	while (fs2 >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar) {
-		getline(fs, buf);
+		getline(fs2, buf);
 
 		if (sam_flag & 0x4) { continue; }
 
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 	cout << argv[2] << ": " << endl;
 	cout << "\t# of aligned reads: " << sam2_aligned_reads.size() << endl;
 	cout << "\t# of reads that aligned and match at least 1 alignment of " << argv[1] << ": " << sam2_aligned_reads_matched << endl;
-	cout << "\t# of alignments: " << num_sam2_alignments;
+	cout << "\t# of alignments: " << num_sam2_alignments << endl;
 	cout << "\t# of alignments that match " << argv[1] << ": " << num_sam2_alignments_matched;
 
 	return 0;
