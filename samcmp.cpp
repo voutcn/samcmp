@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
 	cout << "\t# of aligned reads: " << sam2_aligned_reads.size() << endl;
 	cout << "\t# of reads that aligned and match at least 1 alignment of " << argv[1] << ": " << sam2_aligned_reads_matched << endl;
 	cout << "\t# of alignments: " << num_sam2_alignments << endl;
-	cout << "\t# of alignments that match " << argv[1] << ": " << num_sam2_alignments_matched;
+	cout << "\t# of alignments that match " << argv[1] << ": " << num_sam2_alignments_matched << endl;
 
 	return 0;
 }
