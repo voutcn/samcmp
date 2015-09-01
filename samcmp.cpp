@@ -80,8 +80,10 @@ int main(int argc, char **argv) {
 
 	int num_sam1_alignments = 0;
 
-	while (fs >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar) {
-		getline(fs, buf);
+	while (getline(fs, buf)) {
+		if (buf.length() == 0 || buf[0] == '@') { continue; }
+		istringstream is(buf);
+		is >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar;
 
 		if (sam_flag & 0x4) { continue; }
 
@@ -99,8 +101,10 @@ int main(int argc, char **argv) {
 	int num_sam2_alignments_matched = 0;
 	int sam2_aligned_reads_matched = 0;
 
-	while (fs2 >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar) {
-		getline(fs2, buf);
+	while (getline(fs2, buf)) {
+		if (buf.length() == 0 || buf[0] == '@') { continue; }
+		istringstream is(buf);
+		is >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar;
 
 		if (sam_flag & 0x4) { continue; }
 
