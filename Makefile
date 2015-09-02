@@ -11,3 +11,6 @@ all: samcmp
 
 samcmp: samcmp.cpp
 	$(CXX) $(CXXFLAGS) samcmp.cpp -o samcmp
+
+clean:
+	rm -fr samcmp

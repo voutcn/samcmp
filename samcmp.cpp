@@ -38,6 +38,8 @@ void parseCigar(const string &cigar, int &q_from, int &q_to, int &algn_len) {
 			break;
 
 			case 'M':
+			case 'X':
+			case '=':
 			q_to += num;
 			algn_len += num;
 			break;
