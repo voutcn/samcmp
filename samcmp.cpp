@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 
 	map<string, list<Alignment> > sam1;
 	ifstream fs(argv[1]);
-	string buf;
+	string buf, dummy;
 	string read_id;
 	string ref_id;
 	int sam_flag;
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 	while (getline(fs, buf)) {
 		if (buf.length() == 0 || buf[0] == '@') { continue; }
 		istringstream is(buf);
-		is >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar;
+		is >> read_id >> sam_flag >> ref_id >> ref_from >> dummy >> cigar;
 
 		if (sam_flag & 0x4) { continue; }
 
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
 	while (getline(fs2, buf)) {
 		if (buf.length() == 0 || buf[0] == '@') { continue; }
 		istringstream is(buf);
-		is >> read_id >> sam_flag >> ref_id >> ref_from >> buf >> cigar;
+		is >> read_id >> sam_flag >> ref_id >> ref_from >> dummy >> cigar;
 
 		if (sam_flag & 0x4) { continue; }
 
