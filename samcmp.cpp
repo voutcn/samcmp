@@ -10,7 +10,7 @@ using namespace std;
 
 struct Alignment {
 	string ref_id;
-	int strand : 1;
+	bool strand : 1;
 	int q_from : 31;
 	int q_to : 32;
 	long long ref_from : 48;
@@ -61,7 +61,7 @@ void parseCigar(const string &cigar, int &q_from, int &q_to, int &algn_len) {
 	}
 };
 
-bool overlap(int f1, int t1, int f2, int t2) {
+bool overlap(long long f1, long long t1, long long f2, long long t2) {
 	return t1 > f2 && t2 > f1;
 }
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 	while (getline(fs, buf)) {
 		if (buf.length() == 0 || buf[0] == '@') { continue; }
 		istringstream is(buf);
-		is >> read_id >> sam_flag >> ref_id >> ref_from >> dummy >> cigar;
+		assert(is >> read_id >> sam_flag >> ref_id >> ref_from >> dummy >> cigar);
 
 		if (sam_flag & 0x4) { continue; }
 
@@ -93,6 +93,8 @@ int main(int argc, char **argv) {
 		int strand = !!(0x16 & sam_flag);
 		parseCigar(cigar, q_from, q_to, algn_len);
 		sam1[read_id].push_back(Alignment(ref_id, strand, q_from, q_to, ref_from, ref_from + algn_len));
+		// cerr << buf << endl;
+		// cerr << ref_id << ' ' << strand << ' ' << q_from << ' ' << q_to << ' ' << ref_from << ' ' << ref_from + algn_len << endl;
 		num_sam1_alignments++;
 	}
 
@@ -106,7 +108,7 @@ int main(int argc, char **argv) {
 	while (getline(fs2, buf)) {
 		if (buf.length() == 0 || buf[0] == '@') { continue; }
 		istringstream is(buf);
-		is >> read_id >> sam_flag >> ref_id >> ref_from >> dummy >> cigar;
+		assert(is >> read_id >> sam_flag >> ref_id >> ref_from >> dummy >> cigar);
 
 		if (sam_flag & 0x4) { continue; }
 
@@ -115,6 +117,7 @@ int main(int argc, char **argv) {
 		parseCigar(cigar, q_from, q_to, algn_len);
 		sam2_aligned_reads[read_id] |= 0;
 
+		bool matched = false;
 		auto map_it = sam1.find(read_id);
 		if (map_it != sam1.end()) {
 			for (auto list_it = map_it->second.begin(); list_it != map_it->second.end(); ++list_it) {
@@ -128,9 +131,17 @@ int main(int argc, char **argv) {
 					}
 
 					num_sam2_alignments_matched++;
+					matched = true;
 					break;
 				}
 			}
+		}
+
+		if (!matched) {
+			// cerr << ref_id << ' ' << strand << ' ' << q_from << ' ' << q_to << ' ' << ref_from << ' ' << ref_from + algn_len << endl;
+			// for (auto list_it = map_it->second.begin(); list_it != map_it->second.end(); ++list_it) {
+			// 	cerr << "What: " << list_it->ref_id << ' ' << list_it->strand << ' ' << list_it->q_from << ' ' << list_it->q_to << ' ' << list_it->ref_from << ' ' << list_it->ref_to << endl;
+			// }
 		}
 
 		num_sam2_alignments++;
